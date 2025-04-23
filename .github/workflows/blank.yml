@@ -1,0 +1,39 @@
+import spotipy
+from spotipy.oauth2 import SpotifyClientCredentials
+import random
+
+class MusicRecommendationSystem:
+    def _init_(self):
+        # Initialize Spotify API client
+        client_credentials_manager = SpotifyClientCredentials(client_id='YOUR_CLIENT_ID', client_secret='YOUR_CLIENT_SECRET')
+        self.sp = spotipy.Spotify(client_credentials_manager=client_credentials_manager)
+
+    def recommend_music(self, mood, language, sleepwave):
+        # Search for tracks based on mood and language
+        query = f"mood:{mood} language:{language}"
+        results = self.sp.search(q=query, limit=10, type='track')
+        
+        # Filter tracks based on sleepwave
+        recommended_tracks = []
+        for track in results['tracks']['items']:
+            if sleepwave.lower() in track['name'].lower():
+                recommended_tracks.append(track['name'])
+
+        if recommended_tracks:
+            return random.choice(recommended_tracks)
+        else:
+            return "Sorry, I couldn't find any matching music for your preferences."
+
+# Example usage
+if _name_ == "_main_":
+    # Initialize the recommendation system
+    music_system = MusicRecommendationSystem()
+
+    # User input (replace with actual user inputs)
+    user_mood = 'happy'
+    user_language = 'english'
+    user_sleepwave = 'calm'
+
+    # Get music recommendation
+    recommendation = music_system.recommend_music(user_mood, user_language, user_sleepwave)
+    print("Recommended Music:", recommendation)
